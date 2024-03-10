@@ -26,12 +26,12 @@ const sections = [
 ];
 
 const mainFeaturedPost = {
-  title: 'Title of a longer featured blog post',
+  title: 'Welcome to the blogging site',
   description:
-    "Multiple lines of text that form the lede, informing new readers quickly and efficiently about what's most interesting in this post's contents.",
+    "Here you can find wide range of blogs related various topics....",
   image: 'https://source.unsplash.com/random?wallpapers',
   imageText: 'main image description',
-  linkText: 'Continue reading…',
+  linkText: 'Create your own Blog post here...',
 };
 
 
@@ -57,8 +57,8 @@ export default function Blog() {
         </main>
       </Container>
       <Footer
-        title="Footer"
-        description="Something here to give the footer a purpose!"
+        title="Blogging Platform"
+        description="Create and Read Amazing Blogs here"
       />
     </ThemeProvider>
   );

@@ -1,99 +1,117 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Button, Container, Typography } from '@mui/material';
+import { Container, Typography, TextField, Button, FormControl, InputLabel, Select, MenuItem, Grid, Box, Card, CardContent } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 function CreateForm() {
-    const navigate = useNavigate()
-  const [formData, setFormData] = useState({
-    title: '',
-    content: '',
-    author: '',
-    comments: []
-  });
-
-  useEffect(() => {
-    // Fetch the signed-in user's name from Local Storage and set it as the author
-    const userName = localStorage.getItem('userName');
-    if (userName) {
-      setFormData(formData => ({ ...formData, author: userName }));
-    }
-  }, []);
-
-
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prevFormData => ({
-      ...prevFormData,
-      [name]: value,
-    }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Simple validation
-    if (!formData.title || !formData.content) {
-      alert('Please fill in all fields.');
-      return;
-    }
-    const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
-    posts.push(formData);
-    localStorage.setItem('blogPosts', JSON.stringify(posts));
-    
-    console.log('Form Data Submitted:', formData);
-    alert('Post created successfully!');
-
-    // Reset form fields
-    setFormData({
-      title: '',
-      content: '',
-      author: formData.author
+    const navigate = useNavigate();
+    const [formData, setFormData] = useState({
+        title: '',
+        content: '',
+        author: '',
+        topic: '',
+        comments: [],
     });
-    //navigate to the home page
-    navigate('/')
 
-   
-  };
+    useEffect(() => {
+        const userName = localStorage.getItem('userName');
+        if (userName) {
+            setFormData(formData => ({ ...formData, author: userName }));
+        }
+    }, []);
 
-  return (
-    <Container maxWidth="sm">
-      <Typography variant="h4" component="h1" gutterBottom>
-        Create a Blog Post
-      </Typography>
-      
-      <form onSubmit={handleSubmit} noValidate>
-        <TextField
-          label="Title"
-          variant="outlined"
-          name="title"
-          fullWidth
-          required
-          value={formData.title}
-          onChange={handleChange}
-          margin="normal"
-        />
-        <TextField
-          label="Content"
-          variant="outlined"
-          name="content"
-          fullWidth
-          required
-          multiline
-          rows={4}
-          value={formData.content}
-          onChange={handleChange}
-          margin="normal"
-        />
-        <Button type="submit" variant="contained" color="primary" style={{ marginTop: 20 }}>
-          Submit
-        </Button>
-      </form>
-      <Button onClick={()=>navigate('/')} type="submit" variant="contained" color="primary" style={{ marginTop: 20 }}>
-          Cancel
-        </Button>
-    
-    </Container>
-  );
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prevFormData => ({
+            ...prevFormData,
+            [name]: value,
+        }));
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (!formData.title || !formData.content || !formData.topic) {
+            alert('Please fill in all fields, including selecting a topic.');
+            return;
+        }
+        const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
+        posts.push(formData);
+        localStorage.setItem('blogPosts', JSON.stringify(posts));
+        
+        alert('Post created successfully!');
+        setFormData({
+            title: '',
+            content: '',
+            author: '',
+            topic: '',
+            comments: [],
+        });
+        navigate('/');
+    };
+
+    return (
+        <Container maxWidth="sm" sx={{ mt: 4 }}>
+            <Card raised sx={{ p: 2 }}>
+                <CardContent>
+                    <Typography variant="h5" component="h2" gutterBottom sx={{ textAlign: 'center' }}>
+                        Create a Blog Post
+                    </Typography>
+                    <form onSubmit={handleSubmit} noValidate>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12}>
+                                <TextField
+                                    label="Title"
+                                    variant="outlined"
+                                    name="title"
+                                    fullWidth
+                                    required
+                                    value={formData.title}
+                                    onChange={handleChange}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    label="Content"
+                                    variant="outlined"
+                                    name="content"
+                                    fullWidth
+                                    required
+                                    multiline
+                                    rows={4}
+                                    value={formData.content}
+                                    onChange={handleChange}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <FormControl fullWidth>
+                                    <InputLabel>Topic</InputLabel>
+                                    <Select
+                                        value={formData.topic}
+                                        label="Topic"
+                                        onChange={handleChange}
+                                        name="topic"
+                                        required
+                                    >
+                                        {['Technology', 'Health', 'Sports', 'Education', 'Finance', 'Politics', 'Culture', 'Environment', 'Science', 'Entertainment'].map((topic) => (
+                                            <MenuItem key={topic} value={topic}>{topic}</MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
+                            </Grid>
+                        </Grid>
+                        <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 3 }}>
+                            <Button variant="contained" color="primary" type="submit">
+                                Submit
+                            </Button>
+                            <Button variant="outlined" color="secondary" onClick={() => navigate('/')}>
+                                Cancel
+                            </Button>
+                        </Box>
+                    </form>
+                </CardContent>
+            </Card>
+        </Container>
+    );
 }
 
 export default CreateForm;
+

@@ -52,10 +52,12 @@
 
 
 import React, { useState, useEffect } from 'react';
-import { Typography, Card, CardContent, List, ListItem, ListItemText, Switch, Divider, Container } from '@mui/material';
+import { Typography, Card, CardContent, List, ListItem, ListItemText, Switch, Divider, Container, Button } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 function AdminPanel() {
   const [accounts, setAccounts] = useState([]);
+  const navigate = useNavigate()
 
   useEffect(() => {
     // Load accounts from Local Storage
@@ -82,6 +84,9 @@ function AdminPanel() {
       </Typography>
       <Card raised sx={{ marginTop: 2 }}>
         <CardContent>
+        <Typography variant="h6" component="h2" gutterBottom sx={{ fontWeight: 'bold' }}>
+            Users Info
+          </Typography>
           <List>
             {accounts.map((account, index) => (
               <React.Fragment key={index}>
@@ -99,6 +104,10 @@ function AdminPanel() {
           </List>
         </CardContent>
       </Card>
+
+      <Button variant="contained" onClick={()=>navigate('/')} sx={{ marginBottom: 2, marginTop:3 }}>Back to Homepage</Button>
+
+
     </Container>
   );
 }

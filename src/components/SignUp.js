@@ -8,6 +8,7 @@ function SignUp() {
     name: '',
     email: '',
     password: '',
+    disabled: false,
   });
 
   const handleChange = (e) => {

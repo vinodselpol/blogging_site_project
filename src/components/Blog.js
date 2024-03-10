@@ -39,11 +39,16 @@ const mainFeaturedPost = {
 const defaultTheme = createTheme();
 
 export default function Blog() {
+  const isAdmin = () => {
+    // Implement logic to determine if the user is a moderator
+    return localStorage.getItem('isAdmin') === 'true';
+
+  };
   return (
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
       <Container maxWidth="lg">
-        <Header title="Blog" sections={sections} />
+        <Header title="Blog" sections={sections} isAdmin={isAdmin()} />
         <main>
           <MainFeaturedPost post={mainFeaturedPost} />
          

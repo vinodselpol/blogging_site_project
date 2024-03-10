@@ -24,7 +24,7 @@ function SignIn() {
     const users = JSON.parse(localStorage.getItem('users') || '[]');
     
     // Authenticate user
-    const user = users.find(user => user.email === formData.email && user.password === formData.password);
+    const user = users.find(user => user.email === formData.email && user.password === formData.password && !user.disabled);
     
     if (user) {
       console.log('User signed in:', formData);
@@ -40,10 +40,17 @@ function SignIn() {
         // For any other email, ensure the user is not set as a moderator.
         localStorage.setItem('isModerator', 'false');
       }
+      if (user.email.includes('@admin.com')) {
+        // If the user's email includes '@moderator.com', set them as a moderator.
+        localStorage.setItem('isAdmin', 'true');
+      } else {
+        // For any other email, ensure the user is not set as a moderator.
+        localStorage.setItem('isAdmin', 'false');
+      }
 
       navigate('/')
     } else {
-      alert('Invalid email or password!');
+      alert('Invalid email or password! or Admin has disabled your account');
     }
   };
   

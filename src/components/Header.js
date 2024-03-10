@@ -9,7 +9,7 @@ import Link from '@mui/material/Link';
 import { useNavigate } from 'react-router-dom';
 
 function Header(props) {
-  const { sections, title } = props;
+  const { sections, title, isAdmin } = props;
   const navigate = useNavigate()
   const isAuthenticated = () => {
     return Boolean(localStorage.getItem('isAuthenticated'));
@@ -25,11 +25,14 @@ function Header(props) {
     signOut(); // Update authentication status
     navigate('/signin'); // Redirect to sign-in page or another appropriate page
   };
+
+  
  
   return (
     <React.Fragment>
       <Toolbar sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Button size="small" variant="outlined" onClick={() => navigate('/createpost')}>Create a post </Button>
+        {isAdmin && (<Button size="small" variant="outlined" onClick={() => navigate('/admin')}>Admin controls </Button>)}
         <Typography
           component="h2"
           variant="h5"

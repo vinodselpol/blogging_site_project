@@ -10,16 +10,6 @@ function Posts() {
   const navigate = useNavigate()
   const topic = location.state?.topic;
 
-//   useEffect(() => {
-//     const storedPosts = JSON.parse(localStorage.getItem('blogPosts')) || [];
-//     setPosts(storedPosts);
-//   }, []);
-
-//   const handleLike = (index) => {
-//     console.log(`Like post ${index}`);
-//     // Implement like functionality
-//   };
-
 useEffect(() => {
     const loadedPosts = JSON.parse(localStorage.getItem('blogPosts')) || [];
     // Check if there's a topic selected (passed via state)
@@ -33,10 +23,6 @@ useEffect(() => {
     }
   }, [topic]);
 
-  const handleComment = (index) => {
-    console.log(`Comment on post ${index}`);
-    // Implement comment functionality
-  };
   const updatePosts = (postId, updatedPost) => {
     const updatedPosts = posts.map((post, index) => 
       index === postId ? updatedPost : post

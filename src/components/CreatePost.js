@@ -91,7 +91,7 @@ function CreateForm() {
                                         name="topic"
                                         required
                                     >
-                                        {['Technology', 'Health', 'Sports', 'Education', 'Finance', 'Politics', 'Culture', 'Environment', 'Science', 'Entertainment'].map((topic) => (
+                                        {['Academic Resources', 'Career Services', 'Campus', 'Culture', 'Local Community Resources', 'Social', 'Sports', 'Health and Wellness', 'Technology', 'Travel', 'Alumni'].map((topic) => (
                                             <MenuItem key={topic} value={topic}>{topic}</MenuItem>
                                         ))}
                                     </Select>

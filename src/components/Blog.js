@@ -58,7 +58,7 @@ export default function Blog() {
       </Container>
       <Footer
         title="Blogging Platform"
-        description="Create and Read Amazing Blogs here"
+        description="Create and Read Amazing Blogs here!!!!!!"
       />
     </ThemeProvider>
   );

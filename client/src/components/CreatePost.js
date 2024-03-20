@@ -27,26 +27,67 @@ function CreateForm() {
         }));
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        if (!formData.title || !formData.content || !formData.topic) {
-            alert('Please fill in all fields, including selecting a topic.');
-            return;
-        }
-        const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
-        posts.push(formData);
-        localStorage.setItem('blogPosts', JSON.stringify(posts));
+    // const handleSubmit = (e) => {
+    //     e.preventDefault();
+    //     if (!formData.title || !formData.content || !formData.topic) {
+    //         alert('Please fill in all fields, including selecting a topic.');
+    //         return;
+    //     }
+    //     const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
+    //     posts.push(formData);
+    //     localStorage.setItem('blogPosts', JSON.stringify(posts));
         
-        alert('Post created successfully!');
-        setFormData({
-            title: '',
-            content: '',
-            author: '',
-            topic: '',
-            comments: [],
-        });
+    //     alert('Post created successfully!');
+    //     setFormData({
+    //         title: '',
+    //         content: '',
+    //         author: '',
+    //         topic: '',
+    //         comments: [],
+    //     });
+    //     navigate('/');
+    // };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+        try {
+
+            if(!formData.title || !formData.content || !formData.topic) {
+                alert('Please fill in all fields, including selecting a topic.')
+                return
+            }
+
+            const res = await fetch('http://localhost:8000/api/blog/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+
+            })
+            const data = await res.json()
+            console.log(data)
+            // if(data.success === false) {
+            //     setError(data.message)
+            //     return
+            // }
+            alert('Post created successfully!');
+            setFormData({
+                  title: '',
+                  content: '',
+                  author: '',
+                  topic: '',
+                  comments: [],
+            });
         navigate('/');
-    };
+        } catch (error) {
+            // setError(true)
+            console.log(error)
+        }
+
+    }
+
+
 
     return (
         <Container maxWidth="sm" sx={{ mt: 4 }}>

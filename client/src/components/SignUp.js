@@ -64,6 +64,8 @@ function SignUp() {
     } catch (error) {
 
       console.log(error)
+
+      alert('User already exists with this email!')
       
       // setLoading(false)
       // setError(error.message)

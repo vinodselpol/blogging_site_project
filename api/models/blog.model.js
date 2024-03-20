@@ -16,7 +16,15 @@ const blogSchema = new mongoose.Schema({
     topic:{
         type:String,
         required: true,
-    }
+    },
+    comments: [{
+        text: {
+            type: String,
+        },
+        userName: {
+            type: String,
+        }
+    }],
     // imageUrls:{
     //     type:Array,
     //     // required: true,

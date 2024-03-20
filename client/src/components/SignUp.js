@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 function SignUp() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    name: '',
+    userName: '',
     email: '',
     password: '',
     disabled: false,
@@ -19,21 +19,62 @@ function SignUp() {
     }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-    const userExists = users.some(user => user.email === formData.email);
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   const users = JSON.parse(localStorage.getItem('users') || '[]');
+  //   const userExists = users.some(user => user.email === formData.email);
 
-    if (userExists) {
-      alert('User already exists with this email!');
-      return;
+  //   if (userExists) {
+  //     alert('User already exists with this email!');
+  //     return;
+  //   }
+
+  //   users.push(formData);
+  //   localStorage.setItem('users', JSON.stringify(users));
+  //   alert('User signed up, Now please log in');
+  //   navigate('/signin');
+  // };
+
+  const handleSubmit = async(e) => {
+    e.preventDefault()
+    
+    try {
+      // setLoading(true)
+      const res = await fetch('http://localhost:8000/api/auth/signup', {
+        method:'POST',
+        headers:{
+          'Content-Type':'application/json'
+        },
+        body: JSON.stringify(formData),
+      })
+      const data = await res.json()
+      // if(data.success === false){
+      //   setError(data.message)
+      //   setLoading(false)
+      //   return
+      // }
+      
+      // setLoading(false)
+      // setError(null)
+      //navigate to sign in page is not working
+
+      navigate('/signin')
+      
+
+    } catch (error) {
+
+      console.log(error)
+      
+      // setLoading(false)
+      // setError(error.message)
+      
     }
 
-    users.push(formData);
-    localStorage.setItem('users', JSON.stringify(users));
-    alert('User signed up, Now please log in');
-    navigate('/signin');
-  };
+
+ 
+  }
+
+
 
   return (
     <Container component="main" maxWidth="xs" sx={{ mt: 8 }}>
@@ -47,13 +88,13 @@ function SignUp() {
               <Grid item xs={12}>
                 <TextField
                   autoComplete="name"
-                  name="name"
+                  name="userName"
                   required
                   fullWidth
-                  id="name"
+                  id="userName"
                   label="Full Name"
                   autoFocus
-                  value={formData.name}
+                  value={formData.userName}
                   onChange={handleChange}
                 />
               </Grid>

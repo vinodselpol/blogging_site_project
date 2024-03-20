@@ -8,20 +8,43 @@ function AdminPanel() {
 
   useEffect(() => {
     // Load accounts from Local Storage
-    const loadedAccounts = JSON.parse(localStorage.getItem('users')) || [];
-    setAccounts(loadedAccounts);
+    // const loadedAccounts = JSON.parse(localStorage.getItem('users')) || [];
+    // setAccounts(loadedAccounts);
+    const fetchAccounts = async () => {
+      const loadedAccounts = await fetch('http://localhost:8000/api/user/get');
+      const data = await loadedAccounts.json()
+      console.log(data)
+      setAccounts(data)
+    }
+    fetchAccounts()
+
   }, []);
 
-  const toggleAccountStatus = (email) => {
-    const updatedAccounts = accounts.map(account => {
-      if (account.email === email) {
-        return { ...account, disabled: !account.disabled };
-      }
-      return account;
-    });
+  const toggleAccountStatus = async (email) => {
+    // const updatedAccounts = accounts.map(account => {
+    //   if (account.email === email) {
+    //     return { ...account, disabled: !account.disabled };
+    //   }
+    //   return account;
+    // });
   
-    localStorage.setItem('users', JSON.stringify(updatedAccounts));
-    setAccounts(updatedAccounts); // Update state to reflect changes
+    // localStorage.setItem('users', JSON.stringify(updatedAccounts));
+
+    //fetch from server
+    
+      const res = await fetch('http://localhost:8000/api/user/update', {
+        method:'POST',
+        headers:{
+          'Content-Type':'application/json'
+        },
+        body: JSON.stringify({email: email}),
+      })
+      const data = await res.json()
+      console.log(data)
+      setAccounts(data)
+    
+    
+    // Update state to reflect changes
   };
 
   return (

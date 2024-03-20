@@ -37,6 +37,8 @@ export const signin = async (req, res, next) => {
         const validPassword = bcryptjs.compareSync(password, validUser.password)
         if (!validPassword) return next(errorHandler(400, 'Invalid Password!'))
         console.log('VALID PASSWORD', validPassword)
+        const accountDisabled = validUser.disabled
+        if (accountDisabled) return next(errorHandler(400, 'Account is disabled!'))
         const token = jwt.sign({id: validUser._id}, process.env.JWT_SECRET)
         console.log('TOKEN', token)
         //dont want password to be sent back to client

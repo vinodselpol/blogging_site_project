@@ -61,12 +61,11 @@ function SignIn() {
         localStorage.setItem('isAdmin', data.email.includes('@admin.com') ? 'true' : 'false');
       }
 
-    
 
     } catch (error) {
       
       // dispatch(signInFailure(error.message))
-      alert('Invalid userName or password')
+      alert('Invalid userName or password or account may be disabled.')
       console.log(error)
       // alert(error.message)
       

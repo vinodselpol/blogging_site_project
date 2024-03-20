@@ -2,7 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cors from 'cors';
-// import userRouter from './routes/user.route.js';
+import userRouter from './routes/user.route.js';
 import authRouter from './routes/auth.route.js';
 import blogRouter from './routes/blog.route.js';
 // import listingRouter from './routes/listing.route.js';
@@ -34,7 +34,7 @@ app.listen(8000, () => {
 }
 )
 
-// app.use('/api/user', userRouter)
+app.use('/api/user', userRouter)
 app.use('/api/auth', authRouter)
 app.use('/api/blog', blogRouter)
 

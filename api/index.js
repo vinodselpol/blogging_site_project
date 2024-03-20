@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 // import userRouter from './routes/user.route.js';
 import authRouter from './routes/auth.route.js';
+import blogRouter from './routes/blog.route.js';
 // import listingRouter from './routes/listing.route.js';
 // import cookieParser from 'cookie-parser';
 // import path from 'path';
@@ -35,7 +36,7 @@ app.listen(8000, () => {
 
 // app.use('/api/user', userRouter)
 app.use('/api/auth', authRouter)
-// app.use('/api/listing', listingRouter)
+app.use('/api/blog', blogRouter)
 
 
 // app.use(express.static(path.join(__dirname, '/client/dist')))

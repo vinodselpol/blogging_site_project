@@ -1,6 +1,7 @@
 import User from "../models/user.model.js";
 
 
+
 //get all users
 export const getAllUsers = async (req, res, next) => {
     try {
@@ -93,3 +94,5 @@ export const checkSubscription = async (req, res, next) => {
         next(error);
     }
 }
+
+

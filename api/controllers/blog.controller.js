@@ -1,20 +1,43 @@
 // import { parse } from 'dotenv'
 import Blog from '../models/blog.model.js'
 // import { errorHandler } from '../utils/error.js'
+import nodemailer from "nodemailer";
+import User from '../models/user.model.js';
 
 
 //creating a blog
+// export const createBlog = async (req, res, next) => {
+//     try {
+//         const blog = await Blog.create(req.body)
+        
+//         return res.status(201).json(blog)
+        
+//     } catch (error) {
+//         next(error)
+        
+//     }
+// }
+
 export const createBlog = async (req, res, next) => {
     try {
-        const blog = await Blog.create(req.body)
-        return res.status(201).json(blog)
-        
+        const blog = await Blog.create(req.body);
+
+        // Notify subscribers right after the blog post is created successfully
+        notifySubscribers(blog)
+        .then(() => {
+            console.log('Subscribers notified');
+        })
+        .catch(error => {
+            // Log the error but do not disrupt the blog creation flow
+            console.error('Error notifying subscribers:', error);
+        });
+
+        return res.status(201).json(blog);
         
     } catch (error) {
-        next(error)
-        
+        next(error);
     }
-}
+};
 
 //getting all blogs
 export const getBlogs = async (req, res, next) => {
@@ -67,3 +90,55 @@ export const deleteBlog = async (req, res, next) => {
     }
 
 }
+
+
+// Set up your transporter
+const transporter = nodemailer.createTransport(
+    // Configuration depending on your email service
+    {
+        service: 'gmail',
+        port: 587, // Commonly, 587 for TLS or 465 for SSL
+        secure: false, // true for 465, false for other ports
+        auth: {
+            user: 'vinodselpol2@gmail.com',
+            pass: 'lchk abuf rpqp xuav',
+        },
+    }
+  );
+
+
+ const notifySubscribers = async (post) => {
+    const subscribers = await User.find({ subscriptions: post.topic });
+    console.log('subscribers', subscribers);
+  
+    subscribers.forEach(subscriber => {
+      transporter.sendMail({
+        from: 'vinodselpol2@gmail.com',
+        to: subscriber.email,
+        subject: `New post in ${post.topic}`,
+        text: `Hello, 
+
+Check out our latest post in the ${post.topic} section:
+
+${post.title}
+
+${post.content}
+
+`, // Replace with your logic to generate post URL if not present in the post object
+    html: `<p>Hello,</p>
+           <p>Check out our latest post in the <strong>${post.topic}</strong> section:</p>
+           <h2>${post.title}</h2>
+           <p>${post.content}</p>
+           `, 
+  }, (error, info) => {
+        if (error) {
+          console.error(`Failed to send email to ${subscriber.email}`, error);
+        } else {
+          console.log(`Email sent to ${subscriber.email}: ${info.response}`);
+        }
+      });
+    });
+  }
+
+
+  // lchk abuf rpqp xuav

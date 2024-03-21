@@ -3,20 +3,8 @@ import Blog from '../models/blog.model.js'
 // import { errorHandler } from '../utils/error.js'
 import nodemailer from "nodemailer";
 import User from '../models/user.model.js';
-
-
-//creating a blog
-// export const createBlog = async (req, res, next) => {
-//     try {
-//         const blog = await Blog.create(req.body)
-        
-//         return res.status(201).json(blog)
-        
-//     } catch (error) {
-//         next(error)
-        
-//     }
-// }
+import dotenv from 'dotenv';
+dotenv.config();
 
 export const createBlog = async (req, res, next) => {
     try {
@@ -100,8 +88,8 @@ const transporter = nodemailer.createTransport(
         port: 587, // Commonly, 587 for TLS or 465 for SSL
         secure: false, // true for 465, false for other ports
         auth: {
-            user: 'vinodselpol2@gmail.com',
-            pass: 'lchk abuf rpqp xuav',
+            user: process.env.GMAIL_USER,
+            pass: process.env.GMAL_APP_PASSWORD,
         },
     }
   );
@@ -113,7 +101,7 @@ const transporter = nodemailer.createTransport(
   
     subscribers.forEach(subscriber => {
       transporter.sendMail({
-        from: 'vinodselpol2@gmail.com',
+        from: process.env.GMAIL_USER,
         to: subscriber.email,
         subject: `New post in ${post.topic}`,
         text: `Hello, 
@@ -139,6 +127,3 @@ ${post.content}
       });
     });
   }
-
-
-  // lchk abuf rpqp xuav

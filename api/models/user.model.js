@@ -22,9 +22,15 @@ const userSchema = new mongoose.Schema({
     disabled:{
         type:Boolean,
         default:false
-    },  
+    },
+    subscriptions: [{
+        type: String,
+        enum: ['Academic Resources', 'Career Services', 'Campus', 'Culture', 'Local Community Resources', 'Social', 'Sports', 'Health and Wellness', 'Technology', 'Travel', 'Alumni'],
+      }], 
 }, {timestamps: true});
 
 const User = mongoose.model("User", userSchema)
 
 export default User;
+
+  

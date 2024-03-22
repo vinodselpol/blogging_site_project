@@ -1,5 +1,5 @@
 import express from 'express';
-import { createBlog, getBlogs, createComment, deleteBlog, generateComment } from '../controllers/blog.controller.js';
+import { createBlog, getBlogs, createComment, deleteBlog, generateComment, searchBlogs } from '../controllers/blog.controller.js';
 // import { verifyToken } from '../utils/verifyUser.js';
 import { get } from 'mongoose';
 
@@ -13,5 +13,6 @@ router.get('/get', getBlogs)
 router.post('/comment', createComment)
 router.delete('/delete/:id', deleteBlog)
 router.post('/generatecomment', generateComment)
+router.post('/searchblog', searchBlogs)
 
 export default router

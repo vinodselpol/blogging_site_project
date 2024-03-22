@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Typography, TextField, Button, FormControl, InputLabel, Select, MenuItem, Grid, Box, Card, CardContent } from '@mui/material';
+import { Container, Typography, TextField, Button, FormControl, InputLabel, Select, MenuItem, Grid, Box, Card, CardContent, Alert } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import CheckIcon from '@mui/icons-material/Check';
 
 function CreateForm() {
     const navigate = useNavigate();
@@ -11,6 +12,7 @@ function CreateForm() {
         topic: '',
         comments: [],
     });
+    const [showSuccessAlert, setShowSuccessAlert] = useState(false);
 
     useEffect(() => {
         const userName = localStorage.getItem('userName');
@@ -26,27 +28,6 @@ function CreateForm() {
             [name]: value,
         }));
     };
-
-    // const handleSubmit = (e) => {
-    //     e.preventDefault();
-    //     if (!formData.title || !formData.content || !formData.topic) {
-    //         alert('Please fill in all fields, including selecting a topic.');
-    //         return;
-    //     }
-    //     const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
-    //     posts.push(formData);
-    //     localStorage.setItem('blogPosts', JSON.stringify(posts));
-        
-    //     alert('Post created successfully!');
-    //     setFormData({
-    //         title: '',
-    //         content: '',
-    //         author: '',
-    //         topic: '',
-    //         comments: [],
-    //     });
-    //     navigate('/');
-    // };
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -67,11 +48,8 @@ function CreateForm() {
             })
             const data = await res.json()
             console.log(data)
-            // if(data.success === false) {
-            //     setError(data.message)
-            //     return
-            // }
-            alert('Post created successfully!');
+            // alert('Post created successfully!');
+            setShowSuccessAlert(true);
             setFormData({
                   title: '',
                   content: '',
@@ -79,7 +57,11 @@ function CreateForm() {
                   topic: '',
                   comments: [],
             });
-        navigate('/');
+
+            setTimeout(() => {
+                navigate('/'); // Adjust the path if your homepage has a different path
+            }, 5000);
+        // navigate('/');
         } catch (error) {
             // setError(true)
             console.log(error)
@@ -87,10 +69,14 @@ function CreateForm() {
 
     }
 
-
-
+    console.log("The alert is on: ", showSuccessAlert)
     return (
         <Container maxWidth="sm" sx={{ mt: 4 }}>
+              {showSuccessAlert ? (
+                <Alert icon={<CheckIcon fontSize="inherit" />} severity="success" sx={{ mb: 2 }}>
+                    Post created successfully!
+                </Alert>
+            ) : (
             <Card raised sx={{ p: 2 }}>
                 <CardContent>
                     <Typography variant="h5" component="h2" gutterBottom sx={{ textAlign: 'center' }}>
@@ -150,6 +136,7 @@ function CreateForm() {
                     </form>
                 </CardContent>
             </Card>
+    )}
         </Container>
     );
 }

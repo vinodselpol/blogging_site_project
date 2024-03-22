@@ -5,6 +5,7 @@ import Signin from './components/Signin.js';
 import ProtectedRoute from './components/ProtectedRoute.js'
 import CreatePost from './components/CreatePost.js';
 import Admin from './components/Admin.js';
+import Search from './components/Search.js';
 
 import './App.css';
 
@@ -17,6 +18,7 @@ function App() {
       <Route path='/signup' element={<SignUp />} />
       <Route path='/signin' element={<Signin />} />
       <Route path='/admin' element={<Admin />} />
+      <Route path='/search' element={<Search />} />
 
     </Routes>
     </BrowserRouter>

@@ -15,7 +15,7 @@ const client = new Client({
 export const indexBlogPostInElasticsearch = async(blogPost) => {
     try {
       await client.index({
-        index: 'blogs', // Make sure this index exists in Elasticsearch
+        index: 'blogs', 
         id: blogPost._id.toString(),
         document: {
           title: blogPost.title,
@@ -64,4 +64,28 @@ const createBlogPostIndex = async() => {
     }
   }
   
-  // createBlogPostIndex()
+ // search the blogs in the elastic search
+
+  export const searchBlogsAndGetIds = async(query) => {
+    try {
+      const body  = await client.search({
+        index: 'blogs',
+        body: {
+          query: {
+            multi_match: {
+              query,
+              fields: ['title', 'author', 'content', 'topic'],
+            }
+          }
+        }
+      });
+      console.log(body)
+  
+      const blogIds = body.hits.hits.map(hit => hit._id);
+  
+      return blogIds;
+    } catch (error) {
+      console.error('Failed to search blogs in Elasticsearch:', error);
+      // Depending on your application's needs, you might want to throw this error or handle it gracefully
+    }
+ }

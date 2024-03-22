@@ -5,13 +5,14 @@ import nodemailer from "nodemailer";
 import User from '../models/user.model.js';
 import dotenv from 'dotenv';
 import OpenAI from 'openai';
-import { indexBlogPostInElasticsearch } from '../utils/elasticSearch.js';
+import { indexBlogPostInElasticsearch, searchBlogsAndGetIds } from '../utils/elasticSearch.js';
 
 dotenv.config();
 
 export const createBlog = async (req, res, next) => {
     try {
         const blog = await Blog.create(req.body);
+        console.log(blog)
 
         // Notify subscribers right after the blog post is created successfully
         notifySubscribers(blog)
@@ -192,6 +193,22 @@ ${post.content}
       }
     }
 
+export const searchBlogs = async (req, res, next) => {
+  const { query } = req.body;
 
+  try {
+    // Assume searchBlogsAndGetIds returns an array of IDs from Elasticsearch
+    const blogIds = await searchBlogsAndGetIds(query);
+    console.log('Elasticsearch IDs:', blogIds);
 
+    if (!blogIds.length) {
+      return res.status(404).json({ message: 'No matching blogs found' });
+    }
+    const blogs = await Blog.find({ '_id': { $in: blogIds } });
 
+    return res.status(200).json(blogs);
+  } catch (error) {
+    console.error('Error searching blogs:', error);
+    next(error);
+  }
+};

@@ -6,22 +6,27 @@ import ProtectedRoute from './components/ProtectedRoute.js'
 import CreatePost from './components/CreatePost.js';
 import Admin from './components/Admin.js';
 import Search from './components/Search.js';
-
 import './App.css';
 
 function App() {
   return (
+    <div className="app">
+    
     <BrowserRouter>
     <Routes>
-      <Route path="/" element={<ProtectedRoute><Blog /></ProtectedRoute>} />
+      <Route path="/" element={<ProtectedRoute requireAuth={true}><Blog /></ProtectedRoute>} />
       <Route path="/createpost" element={<ProtectedRoute><CreatePost/></ProtectedRoute>} />
+      
       <Route path='/signup' element={<SignUp />} />
       <Route path='/signin' element={<Signin />} />
-      <Route path='/admin' element={<Admin />} />
-      <Route path='/search' element={<Search />} />
+      
+      
+      <Route path='/admin' element={<ProtectedRoute requireAuth={true} requireAdmin={true}><Admin/></ProtectedRoute>} />
+      <Route path='/search' element={<ProtectedRoute><Search/></ProtectedRoute>} />
 
     </Routes>
     </BrowserRouter>
+    </div>
   );
 }
 

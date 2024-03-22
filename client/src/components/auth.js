@@ -13,3 +13,12 @@ export const signOut = () => {
     localStorage.removeItem('isAuthenticated');
   };
   
+
+export const isAdmin = () => {
+  const userISAdmin = localStorage.getItem('isAdmin');
+  console.log(userISAdmin)
+
+  return userISAdmin === 'true';
+
+  };
+  

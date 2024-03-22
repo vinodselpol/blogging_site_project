@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Box, Button, TextField, Typography, IconButton, Paper, Avatar, Stack } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Box, Button, TextField, Typography, IconButton, Paper, Avatar, Stack, Switch } from '@mui/material';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import CommentIcon from '@mui/icons-material/Comment';
 import FaceIcon from '@mui/icons-material/Face';
@@ -8,21 +8,42 @@ import DeleteIcon from '@mui/icons-material/Delete';
 function Post({ post, postId, updatePosts, onDelete, isModerator }) {
   const [newComment, setNewComment] = useState('');
   const [showComments, setShowComments] = useState(false);
+  const [autoCommentEnabled, setAutoCommentEnabled] = useState(false);
+  const [generatedComment, setGeneratedComment] = useState('');
 
   const handleNewCommentChange = (event) => setNewComment(event.target.value);
 
-  // const submitComment = () => {
-  //   if (newComment.trim()) {
-  //     const userName = localStorage.getItem('userName') || 'Anonymous';
-  //     const userComment = { text: newComment, username: userName };
-  //     const updatedPost = { ...post, comments: [...post.comments, userComment] };
-  //     updatePosts(postId, updatedPost);
-  //     setNewComment('');
-  //   }
-  // };
+  const fetchGeneratedComment = async () => {
+    try {
+      const response = await fetch('http://localhost:8000/api/blog/generatecomment', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ _id: post._id }),
+      });
+  
+      const data = await response.json();
+      setGeneratedComment(data.trimmedComment);
+      setNewComment(data.trimmedComment); // Automatically set the new comment to the generated one
+    } catch (error) {
+      console.error('Error fetching generated comment:', error);
+    }
+  };
+
+  useEffect(() => {
+    if (autoCommentEnabled) {
+      fetchGeneratedComment();
+    }
+  }, [autoCommentEnabled]);
+
+
+ 
+  
 
   const submitComment = async () => {
-    if (newComment.trim()) {
+    const commentToSubmit = newComment.trim() || generatedComment.trim();
+    if (commentToSubmit) {
       const userName = localStorage.getItem('userName') || 'Anonymous';
       const userComment = { text: newComment, userName: userName , _id: post._id};
       const res = await fetch('http://localhost:8000/api/blog/comment/', {
@@ -35,6 +56,8 @@ function Post({ post, postId, updatePosts, onDelete, isModerator }) {
       const data = await res.json();
       updatePosts(postId, data);
       setNewComment('');
+      setGeneratedComment(''); 
+      setAutoCommentEnabled(false);
     }
   }
 
@@ -72,6 +95,8 @@ function Post({ post, postId, updatePosts, onDelete, isModerator }) {
             ) : (
               <Typography mt={1}>No comments yet.</Typography>
             )}
+            
+            
             <TextField
               fullWidth
               variant="outlined"
@@ -80,7 +105,74 @@ function Post({ post, postId, updatePosts, onDelete, isModerator }) {
               onChange={handleNewCommentChange}
               margin="normal"
             />
-            <Button onClick={submitComment} variant="contained" sx={{ mt: 1 }}>Comment</Button>
+            
+            {/* <Box mt={2} display="flex" alignItems="center" gap={2}>
+            <Button onClick={submitComment} variant="contained" sx={{ mt: 1, py: '6px', fontSize: '0.875rem' }}>
+  Submit Comment
+</Button>
+<Box
+  display="flex"
+  alignItems="center"
+  sx={{
+    margin: '20px 0',
+    padding: '8px 10px', // Adjust padding to visually align with the button's height
+    borderRadius: '8px',
+    border: '1px solid #e0e0e0',
+    backgroundColor: '#f5f5f5',
+  }}
+>
+  <Typography
+    mr={1}
+    sx={{
+      fontWeight: 'bold',
+      color: '#333',
+      fontSize: '0.875rem', // Adjust font size to match the button's text size if necessary
+    }}
+  >
+    Auto-generate comment:
+  </Typography>
+  <Switch
+    checked={autoCommentEnabled}
+    onChange={(e) => setAutoCommentEnabled(e.target.checked)}
+    sx={{
+      // No additional height adjustment here; rely on the Box's padding and content size
+    }}
+  />
+</Box>
+              
+            </Box> */}
+            <Box mt={2} display="flex" alignItems="center" gap={2}>
+  <Button onClick={submitComment} variant="contained" sx={{ py: '10px', fontSize: '0.875rem' }}>
+    Submit Comment
+  </Button>
+  <Box
+    display="flex"
+    alignItems="center"
+    sx={{
+      padding: '4px', // Adjust padding to visually align with the button's height
+      borderRadius: '8px',
+      border: '1px solid #e0e0e0',
+      backgroundColor: 'lightblue',
+      height: '100%', // Make Box fill the height to match the button vertically if necessary
+    }}
+  >
+    <Typography
+      sx={{
+        fontWeight: 'bold',
+        color: '#333',
+        fontSize: '0.875rem', // Ensure the text matches the button's font size
+      }}
+    >
+      Auto-generate comment:
+    </Typography>
+    <Switch
+      checked={autoCommentEnabled}
+      onChange={(e) => setAutoCommentEnabled(e.target.checked)}
+    />
+  </Box>
+</Box>
+
+
           </Box>
         )}
       </Box>

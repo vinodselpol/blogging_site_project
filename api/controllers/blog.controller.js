@@ -5,6 +5,8 @@ import nodemailer from "nodemailer";
 import User from '../models/user.model.js';
 import dotenv from 'dotenv';
 import OpenAI from 'openai';
+import { indexBlogPostInElasticsearch } from '../utils/elasticSearch.js';
+
 dotenv.config();
 
 export const createBlog = async (req, res, next) => {
@@ -20,6 +22,8 @@ export const createBlog = async (req, res, next) => {
             // Log the error but do not disrupt the blog creation flow
             console.error('Error notifying subscribers:', error);
         });
+
+        await indexBlogPostInElasticsearch(blog);
 
         return res.status(201).json(blog);
         
@@ -113,7 +117,7 @@ ${post.title}
 
 ${post.content}
 
-`, // Replace with your logic to generate post URL if not present in the post object
+`, 
     html: `<p>Hello,</p>
            <p>Check out our latest post in the <strong>${post.topic}</strong> section:</p>
            <h2>${post.title}</h2>
@@ -189,4 +193,5 @@ ${post.content}
     }
 
 
-//`Given the following blog post content, generate a thoughtful comment:\n\n"${post.content}"`
+
+

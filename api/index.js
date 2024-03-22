@@ -5,6 +5,7 @@ import cors from 'cors';
 import userRouter from './routes/user.route.js';
 import authRouter from './routes/auth.route.js';
 import blogRouter from './routes/blog.route.js';
+
 // import listingRouter from './routes/listing.route.js';
 // import cookieParser from 'cookie-parser';
 // import path from 'path';
@@ -17,8 +18,6 @@ mongoose.connect(process.env.MONGO).then(() => {
     console.error('Error connecting to mongo', err);
     }
     );
-
-
 // const __dirname = path.resolve();
 const app = express();
 app.use(cors());
@@ -27,8 +26,6 @@ app.use(express.json())
 // app.use(cookieParser())
 
 //display the text on the screen
-
-
 app.listen(8000, () => {
   console.log('Server listening on port 8000!');
 }

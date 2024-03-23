@@ -46,20 +46,15 @@ export default function Blog() {
   };
   return (
     <ThemeProvider theme={defaultTheme}>
-      <CssBaseline />
-      <Container maxWidth="lg">
-        <Header title="Blog" sections={sections} isAdmin={isAdmin()} />
-        <main>
-          <MainFeaturedPost post={mainFeaturedPost} />
-         
-          < Posts />
-         
-        </main>
+    <CssBaseline />
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', width: '100vw', margin: '0', padding: '0', overflowX: 'hidden' }}>
+      <Header title="Blog" sections={sections} isAdmin={isAdmin()} />
+      <Container maxWidth={false} disableGutters sx={{ flexGrow: 1, width: '100%', padding: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+        <MainFeaturedPost post={mainFeaturedPost} />
+        <Posts />
       </Container>
-      <Footer
-        title="Blogging Platform"
-        description="Create and Read Amazing Blogs here!!!!!!"
-      />
-    </ThemeProvider>
+      <Footer title="Blogging Platform" description="Create and Read Amazing Blogs here!!!!!!" />
+    </div>
+  </ThemeProvider>
   );
 }

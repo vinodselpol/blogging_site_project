@@ -34,7 +34,8 @@ function Header(props) {
   };
 
   return (
-    <AppBar position="static" color="default" elevation={1}>
+    <AppBar position="fixed" color="default" elevation={1} sx={{ zIndex: theme => theme.zIndex.drawer + 1, backgroundColor: '#F8F8F2' }}>
+
       <Toolbar sx={{ borderBottom: 1, borderColor: 'divider', justifyContent: 'space-between' }}>
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <Button size="small" variant="text" onClick={() => navigate('/createpost')} sx={{ marginRight: 2 }}>
@@ -82,23 +83,6 @@ function Header(props) {
       </Toolbar>
       <Toolbar component="nav" variant="dense" sx={{ justifyContent: 'center', overflowX: 'auto' }}>
         {sections.map((section) => (
-          // <Link
-          //   color="inherit"
-          //   noWrap
-          //   key={section.title}
-          //   variant="body2"
-          //   href={section.url}
-          //   sx={{ p: 1, flexShrink: 0, textDecoration: 'none' }}
-          //   onClick={(e) => {
-          //     e.preventDefault();
-          //     navigate(section.url);
-          //   }}
-          // >
-          //   {section.title}
-          // </Link>
-          // Import useNavigate from 'react-router-dom' is already there.
-
-// In the Header component, update the onClick handler for each Link
 <Link
   color="inherit"
   noWrap

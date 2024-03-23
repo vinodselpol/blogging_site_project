@@ -77,14 +77,6 @@ useEffect(() => {
     
   }
 
-
-
-  // const handleDeletePost = (pID) => {
-  //   const updatedPosts = posts.filter((_, index) => index !== postId);
-  //   setPosts(updatedPosts);
-  //   localStorage.setItem('blogPosts', JSON.stringify(updatedPosts));
-  // };
-
   const isModerator = () => {
     // Implement logic to determine if the user is a moderator
     return localStorage.getItem('isModerator') === 'true';
@@ -96,25 +88,7 @@ useEffect(() => {
   };
 
 
-  //send a post request to the server to subscribe to a topic
-  // const handleSubscribe = async () => {
-  //   const userName = localStorage.getItem('userName')
-
-  //   const res = await fetch('http://localhost:8000/api/user/subscribe', {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify({ topic, userName}),
-  //   });
-  //   const data = await res.json();
-  //   console.log(data)
-
-  //   if (data.status === 200) {
-  //     setSubscribed(true);
-  //   }
-   
-  // }
+  
   const handleSubscribe = async () => {
     const userName = localStorage.getItem('userName');
     try {
@@ -178,10 +152,7 @@ useEffect(() => {
   const headingText = topic ? `Blog Posts in ${topic}` : "All Blog Posts";
 
   return (
-    <Container maxWidth="md">
-      {/* <Typography variant="h4" component="h1" gutterBottom>
-        Blog Posts
-      </Typography> */}
+    <Container maxWidth={false} sx={{ width: '70vw', paddingX: 0 }}> 
       <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ mt: 4, mb: 2 }}>
         <Typography variant="h4">{headingText}</Typography>
         {topic && (

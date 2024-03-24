@@ -5,43 +5,47 @@ dotenv.config();
 
 
 async function getActivities() {
-    return new Promise((resolve, reject) => {
-        getJson({
-          engine: "google_events",
-          q: "Things to do in Chicago",
-          hl: "en",
-          gl: "us",
-          htichips:"date:tomorrow",
-          api_key: process.env.SERP_API_KEY,
-        }, (data, error) => {
-          if (error) {
-            reject(error);
-          } else {
-            resolve(data);
-          }
-        });
-      });
-}
-
-export const askAIAgent = async (req, res) => {
     try {
+        const response = await new Promise((resolve, reject) => {
+            getJson({
+              engine: "google_events",
+              q: "Things to do in Chicago",
+              hl: "en",
+              gl: "us",
+              htichips:"date:today",
+              api_key: process.env.SERP_API_KEY,
+            }, (data, error) => {
+              if (error) {
+                reject(error);
+              } else {
+                resolve(data);
+              }
+            });
+          });
 
-        const response = await getActivities();
         const eventsResults = response["events_results"];
-        const data = eventsResults.map((event) => ({
+        const activitiesData = eventsResults.map((event) => ({
             title:event.title,
             date: event.date,
             address: event.address,
             description: event.description,
         }))
-        
+
+        console.log("activities data is here",activitiesData);
+
+        return activitiesData;
+    } catch (error) {
+        console.log("Failed to fetch activities",error);
+    }
+    
+}
 
 
 
-        // console.log('initial messages', messages)
-        
-        // const response = await agent("Please suggest some activities based on my location and the current weather.");
-        res.status(200).json(data);
+export const askAIAgent = async (req, res) => {
+    try {
+        const response = await agent("Please suggest some activities to do based on my location and the current weather.");
+        res.status(200).json(response);
 
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -75,16 +79,12 @@ const tools = [
         parameters: {
           type: "object",
           properties: {
-            latitude: {
-              type: "string",
-            },
-            longitude: {
-              type: "string",
-            },
+            latitude: { type: "string" },
+            longitude: { type: "string" },
           },
-          required: ["longitude", "latitude"],
+          required: ["latitude", "longitude"],
         },
-      }
+      },
     },
     {
       type: "function",
@@ -95,9 +95,21 @@ const tools = [
           type: "object",
           properties: {},
         },
-      }
+      },
     },
-  ];
+    {
+      type: "function",
+      function: {
+        name: "getActivities",
+        description: "Get the current activities to do in a given location",
+        parameters: {
+          type: "object", // Corrected to 'object' from 'array'
+          properties: {},
+        },
+      },
+    },
+];
+
 
 const messages = [
     {
@@ -117,7 +129,7 @@ const agent = async (userInput) => {
 
     console.log('after pushing',messages)
 
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 7; i++) {
     const response = await openai.chat.completions.create({
       model: "gpt-4-0613",
       messages: messages,
@@ -159,6 +171,7 @@ return "The maximum number of iterations has been met without a suitable answer.
 const availableTools = {
     getCurrentWeather,
     getLocation,
+    getActivities
   };
   
 

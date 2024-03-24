@@ -39,7 +39,7 @@ function Header(props) {
       <Toolbar sx={{ borderBottom: 1, borderColor: 'divider', justifyContent: 'space-between' }}>
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <Button size="small" variant="text" onClick={() => navigate('/createpost')} sx={{ marginRight: 2 }}>
-            Create a post
+            Create a Blog
           </Button>
           {isAdmin && (
             <Button size="small" variant="text" onClick={() => navigate('/admin')}>

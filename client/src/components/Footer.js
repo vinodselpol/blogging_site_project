@@ -5,38 +5,60 @@ import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://portfolio-vinodselpol.vercel.app/">
-        Vinod Krishna Selpol
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
 
-function Footer(props) {
-  const { description, title } = props;
+function Footer() {
+  
 
   return (
-    <Box component="footer" sx={{ bgcolor: 'background.paper', py: 6 }}>
-      <Container maxWidth="lg">
-        <Typography variant="h6" align="center" gutterBottom>
-          {title}
-        </Typography>
-        <Typography
-          variant="subtitle1"
-          align="center"
-          color="text.secondary"
-          component="p"
-        >
-          {description}
-        </Typography>
-        <Copyright />
-      </Container>
+  
+    <Box sx={{ overflowX: 'hidden', width: '100vw' }}>
+    <Box sx={{
+      display: 'grid',
+      gridTemplateColumns: { md: 'repeat(4, 1fr)' },
+      gap: { xs: 4, md: 10 },
+      mx: 'auto',
+      bgcolor: 'grey.200',
+      color: 'grey.600',
+      fontSize: '0.75rem',
+      px: { xs: 2, sm: 4 }, // Adjust padding for responsiveness
+      py: 4,
+    }}>
+      <Box sx={{ spaceY: 2}}> {/* space-y-4 */}
+        <Typography variant="p" sx={{ fontWeight: 'bold', color:'black'}}>ABOUT</Typography>
+        <Typography sx={{ fontWeight: 'normal', color: 'black', fontSize: '0.85rem', mb: 2, mt:2 }}>How Blogging works</Typography>
+        <Typography sx={{ fontWeight: 'normal', color: 'black', fontSize: '0.85rem', mb: 2 }}>Newsroom</Typography>
+        <Typography sx={{ fontWeight: 'normal', color: 'black', fontSize: '0.85rem', mb: 2 }}>Investors</Typography>
+        <Typography sx={{ fontWeight: 'normal', color: 'black', fontSize: '0.85rem', mb: 2 }}>Blog plus</Typography>
+        <Typography sx={{ fontWeight: 'normal', color: 'black', fontSize: '0.85rem', mb: 2 }}>Blog Luxe</Typography>
+      </Box>
+    
+      <Box sx={{ spaceY: 2 }}>
+        <Typography variant="p" sx={{ fontWeight: 'bold', color:'black' }}>COMMUNITY</Typography>
+        <Typography sx={{ fontWeight: 'normal', color: 'black', fontSize: '0.85rem', mb: 2 , mt:2 }}>Accessibility</Typography>
+        <Typography sx={{ fontWeight: 'normal', color: 'black', fontSize: '0.85rem', mb: 2 }}>This is not a real site</Typography>
+        <Typography sx={{ fontWeight: 'normal', color: 'black', fontSize: '0.85rem', mb: 2 }}>Built for fun</Typography>
+        <Typography sx={{ fontWeight: 'normal', color: 'black', fontSize: '0.85rem', mb: 2 }}>Referrals accepted</Typography>
+        <Typography sx={{ fontWeight: 'normal', color: 'black', fontSize: '0.85rem', mb: 2 }}>vinod</Typography>
+      </Box>
+    
+      <Box sx={{ spaceY: 2 }}>
+        <Typography variant="p" sx={{ fontWeight: 'bold', color:'black' }}>HOST</Typography>
+        <Typography sx={{ fontWeight: 'normal', color: 'black', fontSize: '0.85rem', mb: 2, mt:2 }}>vinod</Typography>
+        <Typography sx={{ fontWeight: 'normal', color: 'black', fontSize: '0.85rem', mb: 2 }}>Presents</Typography>
+        <Typography sx={{ fontWeight: 'normal', color: 'black', fontSize: '0.85rem', mb: 2 }}>CS Grad student</Typography>
+        <Typography sx={{ fontWeight: 'normal', color: 'black', fontSize: '0.85rem', mb: 2 }}>Software Engineer</Typography>
+        <Typography sx={{ fontWeight: 'normal', color: 'black', fontSize: '0.85rem', mb: 2 }}>Join Now</Typography>
+      </Box>
+    
+      <Box sx={{ spaceY: 2 }}>
+        <Typography variant="p" sx={{ fontWeight: 'bold', color:'black' }}>SUPPORT</Typography>
+        <Typography sx={{ fontWeight: 'normal', color: 'black', fontSize: '0.85rem', mb: 2, mt:2 }}>Help Center</Typography>
+        <Typography sx={{ fontWeight: 'normal', color: 'black', fontSize: '0.85rem', mb: 2 }}>Trust & Safety</Typography>
+        <Typography sx={{ fontWeight: 'normal', color: 'black', fontSize: '0.85rem', mb: 2 }}>Say Hi YouTube</Typography>
+        <Typography sx={{ fontWeight: 'normal', color: 'black', fontSize: '0.85rem' , mb: 2}}>Easter Eggs</Typography>
+        <Typography sx={{ fontWeight: 'normal', color: 'black', fontSize: '0.85rem', mb: 2 }}>For the Win</Typography>
+      </Box>
+    </Box>
     </Box>
   );
 }

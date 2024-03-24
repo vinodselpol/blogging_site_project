@@ -49,8 +49,9 @@ const Chatbot = () => {
   }, [messages]);
 
   return (
-    <Container maxWidth="sm" sx={{ bgcolor: '#f5f5f5', height: '100vh', display: 'flex', flexDirection: 'column' }}>
-          <AppBar position="sticky" sx={{ bgcolor: '#2196f3'}}>
+    <Box sx={{ width: '100%' }}> {/* No overflow hidden needed if disableGutters is used */}
+    <Container maxWidth="sm" disableGutters sx={{ bgcolor: '#f5f5f5', height: '70vh', display: 'flex', flexDirection: 'column' }}>
+      <AppBar position="sticky" sx={{ bgcolor: '#2196f3', width: '100%' }}> {/* Should fill the width now without negative margins */}
         <Toolbar>
           <Typography variant="h6" sx={{ flexGrow: 1, textAlign: 'center', color: 'white' }}>
             Chat with AI Agent
@@ -59,66 +60,87 @@ const Chatbot = () => {
       </AppBar>
       <Box sx={{ flexGrow: 1, overflowY: 'auto', p: 2 }} ref={chatboxRef}>
       {messages.map((msg, index) => (
-  <Box key={index} sx={{
-    position: 'relative', // Relative positioning for the container
-    display: 'flex',
-    justifyContent: 'flex-start',
-    mb: 2,
-    width: '100%', // Full width of the container
-    ...(msg.role === 'ai' && {
-      justifyContent: 'flex-end' // Align AI messages to the end (right)
-    })
-  }}>
-    <Box sx={{
-      bgcolor: msg.role === 'ai' ? '#e3f2fd' : '#f5f5f5',
-      p: 1,
-      borderRadius: '20px',
-      maxWidth: '80%',
-      wordBreak: 'break-word',
-      ...(msg.role === 'ai' && {
-        mr: '3rem', // Reserve space for the avatar
-      })
-    }}>
-      <Typography variant="body1">
-        {msg.content}
-      </Typography>
-      {msg.options && (
-        <Box sx={{ mt: 1 }}>
-          {msg.options.map((option, idx) => (
-            <Chip key={idx} label={option} onClick={() => handleOptionClick(option)} 
-                  sx={{ mb: 1, cursor: 'pointer', bgcolor: '#2196f3', color: 'white' }} />
-          ))}
+        <Box key={index} sx={{
+          display: 'flex',
+          flexDirection: msg.role === 'ai' ? 'row-reverse' : 'row',
+          mb: 2,
+          alignItems: 'flex-start',
+        }}>
+          <Avatar sx={{
+            bgcolor: msg.role === 'ai' ? '#2196f3' : '#e0e0e0',
+            order: msg.role === 'ai' ? 2 : 1,
+          }}>
+            {msg.role === 'ai' ? <ComputerIcon /> : <PersonIcon />}
+          </Avatar>
+          <Box sx={{
+            order: msg.role === 'ai' ? 1 : 2,
+            bgcolor: msg.role === 'ai' ? '#e3f2fd' : '#f5f5f5',
+            p: 1,
+            borderRadius: '20px',
+            ml: 1,
+            mr: 1,
+            maxWidth: 'calc(100% - 48px)', // account for avatar size
+            alignSelf: 'flex-start',
+            wordBreak: 'break-word',
+            display: 'flex',
+            flexDirection: 'column',
+          }}>
+            <Typography variant="body1">
+              {msg.content}
+            </Typography>
+            {msg.options && (
+              <Box sx={{ mt: 1, display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                {msg.options.map((option, idx) => (
+                  <Chip
+                    key={idx}
+                    label={option}
+                    onClick={() => handleOptionClick(option)}
+                    sx={{
+                      mb: 1,
+                      mr: 1,
+                      bgcolor: '#2196f3',
+                      color: 'white',
+                      whiteSpace: 'normal', // Allows the text to wrap within the Chip
+                      maxWidth: '100%', // Ensures the Chip doesn't exceed its container's width
+                    }}
+                  />
+                ))}
+              </Box>
+            )}
+          </Box>
         </Box>
-      )}
+      ))}
     </Box>
-    {msg.role === 'ai' && (
-      <Avatar sx={{
-        bgcolor: '#2196f3',
-        position: 'absolute', // Absolute positioning for the avatar
-        right: '0', // Align to the right
-        top: '50%',
-        transform: 'translateY(-50%)', // Center vertically
-      }}>
-        <ComputerIcon />
-      </Avatar>
-    )}
-    
+  <Box
+    component="form"
+    onSubmit={handleSubmit}
+    sx={{ 
+      bgcolor: 'transparent',
+      px: 2, 
+      py: 2, 
+      display: 'flex',
+      alignItems: 'center',
+      width: '100%', 
+      boxSizing: 'border-box', 
+    }}
+  >
+    <TextField
+      fullWidth
+      placeholder="Type your question..."
+      value={userInput}
+      onChange={(e) => setUserInput(e.target.value)}
+      sx={{ 
+        mr: 1, 
+        borderRadius: '20px', 
+        '& .MuiOutlinedInput-root': { borderRadius: '20px' } 
+      }}
+    />
+    <Button type="submit" variant="contained" color="primary" sx={{ borderRadius: '20px' }}>
+      Ask
+    </Button>
   </Box>
-))}
-      </Box>
-      <Box component="form" onSubmit={handleSubmit} sx={{ bgcolor: 'white', p: 2, display: 'flex', alignItems: 'center' }}>
-        <TextField
-          fullWidth
-          placeholder="Type your question..."
-          value={userInput}
-          onChange={(e) => setUserInput(e.target.value)}
-          sx={{ mr: 1, borderRadius: '20px', '& .MuiOutlinedInput-root': { borderRadius: '20px' } }}
-        />
-        <Button type="submit" variant="contained" color="primary" sx={{ borderRadius: '20px' }}>
-          Ask
-        </Button>
-      </Box>
-    </Container>
+</Container>
+</Box>
   );
 };
 

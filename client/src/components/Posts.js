@@ -152,7 +152,7 @@ useEffect(() => {
   const headingText = topic ? `Blog Posts in ${topic}` : "All Blog Posts";
 
   return (
-    <Container maxWidth={false} sx={{ width: '70vw', paddingX: 0 }}> 
+    <Container maxWidth={false} sx={{ width: '50vw', paddingX: 0 }}> 
       <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ mt: 4, mb: 2 }}>
         <Typography variant="h4">{headingText}</Typography>
         {topic && (

@@ -28,8 +28,8 @@ const sections = [
 const mainFeaturedPost = {
   title: 'Welcome to the blogging site',
   description:
-    "Here you can find wide range of blogs related various topics....",
-  image: 'https://source.unsplash.com/random?wallpapers',
+    "Here you can find wide range of blogs related to various topics....",
+  image: 'https://a0.muscache.com/im/pictures/57b9f708-bb12-498c-bc33-769f8fc43e63.jpg', // https://source.unsplash.com/random?wallpapers
   imageText: 'main image description',
   linkText: 'Create your own Blog post here...',
 };
@@ -53,7 +53,7 @@ export default function Blog() {
         <MainFeaturedPost post={mainFeaturedPost} />
         <Posts />
       </Container>
-      <Footer title="Blogging Platform" description="Create and Read Amazing Blogs here!!!!!!" />
+      <Footer />
     </div>
   </ThemeProvider>
   );

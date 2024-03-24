@@ -141,7 +141,7 @@ const agent = async (userInput) => {
 
     for (let i = 0; i < 7; i++) {
     const response = await openai.chat.completions.create({
-      model: "gpt-4-0613",
+      model: "gpt-3.5-turbo", //gpt-4-0613
       messages: messages,
       tools: tools,
     });

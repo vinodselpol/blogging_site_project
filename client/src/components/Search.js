@@ -50,7 +50,7 @@ function Search() {
       </div>
       {results.length > 0 ? (
         results.map((result, index) => (
-          <Paper elevation={2} style={{ margin: '20px 0', padding: '15px' }} key={index}>
+          <Paper elevation={20} style={{ margin: '20px 0', padding: '15px', background:'transparent'}} key={index}>
             <Typography variant="h6" component="h2">
               {result.title}
             </Typography>

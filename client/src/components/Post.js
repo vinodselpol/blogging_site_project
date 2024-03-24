@@ -72,15 +72,15 @@ function Post({ post, postId, updatePosts, onDelete, isModerator }) {
   }
 
   return (
-<Paper elevation={3} sx={{ my: 2, p: 2, borderRadius: 3 }}>
+<Paper elevation={10} sx={{ my: 2, p: 2, borderRadius: 3, background:'transparent'}}>
 <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-  <Stack direction="row" spacing={1} alignItems="center">
+  <Stack direction="row" spacing={2} alignItems="center">
     <Avatar sx={{ bgcolor: deepOrange[500] }}>
       {post.author.charAt(0).toUpperCase()}
     </Avatar>
     <Box display="flex" alignItems="center">
       <Typography fontWeight="bold" variant="subtitle1" noWrap>
-        {post.author}
+        {post.author.toUpperCase()}
       </Typography>
       <Typography variant="caption" color="text.secondary" noWrap>
         &nbsp;·&nbsp;{moment(post.createdAt).fromNow()}
@@ -175,7 +175,7 @@ function Post({ post, postId, updatePosts, onDelete, isModerator }) {
                 fontSize: '0.875rem'
               }}
             >
-              Auto-generate comment:
+              AI COMMENT:
             </Typography>
             <Switch
               checked={autoCommentEnabled}

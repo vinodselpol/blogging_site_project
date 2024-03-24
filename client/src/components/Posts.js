@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Typography, Box, Button } from '@mui/material';
+import { Container, Typography, Box, Button, Grid } from '@mui/material';
 import Post from './Post'; // Make sure the path is correct
 import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
@@ -152,10 +152,10 @@ useEffect(() => {
   const headingText = topic ? `Blog Posts in ${topic}` : "All Blog Posts";
 
   return (
-    <Container maxWidth={false} sx={{ width: '50vw', paddingX: 0 }}> 
-      <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ mt: 4, mb: 2 }}>
-        <Typography variant="h4">{headingText}</Typography>
-        {topic && (
+    <Container maxWidth="xl" sx={{ mt: 4, mb: 2, px: 3 }}> {/* Adjust padding as needed */}
+    <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
+      <Typography variant="h4">{headingText}</Typography>
+      {topic && (
           <>
           <Button variant="outlined" onClick={handleShowAllPosts}>Show All Posts</Button>
           {
@@ -165,23 +165,28 @@ useEffect(() => {
               <Button variant="contained" color="secondary" onClick={handleUnsubscribe}>Unsubscribe</Button>
             )
           }
-
           </>
-          
-          
-        
         )}
-
-      </Box>
-      {posts.length > 0 ? (
-        posts.map((post, index) => (
-            <Post key={index} post={post} postId={index} updatePosts={updatePosts}  onDelete={handleDeletePost}
-            isModerator={isModerator()} />
-        ))
-      ) : (
-        <Typography variant="body1">No posts available.</Typography>
-      )}
-    </Container>
+    </Box>
+    
+    {posts.length > 0 ? (
+      <Grid container spacing={3}> {/* Adjust spacing as needed */}
+        {posts.map((post, index) => (
+           <Grid item xs={12} sm={6} md={4} key={index} sx={{ height: '500px' }}>
+            <Post
+              post={post}
+              postId={index}
+              updatePosts={updatePosts}
+              onDelete={handleDeletePost}
+              isModerator={isModerator()}
+            />
+          </Grid>
+        ))}
+      </Grid>
+    ) : (
+      <Typography variant="body1">No posts available.</Typography>
+    )}
+  </Container>
   );
 }
 

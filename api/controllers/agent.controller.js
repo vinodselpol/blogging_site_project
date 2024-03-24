@@ -44,13 +44,23 @@ async function getActivities() {
 
 export const askAIAgent = async (req, res) => {
     try {
-        const response = await agent("Please suggest some activities to do based on my location and the current weather.");
-        res.status(200).json(response);
-
+      // Extract the 'query' parameter from the URL query string
+      const userQuery = req.query.query;
+  
+      // Check if 'query' parameter is provided
+      if (!userQuery) {
+        return res.status(400).json({ message: "Query parameter 'query' is required." });
+      }
+  
+      // Use the extracted 'query' parameter in the agent function
+      const response = await agent(userQuery);
+      res.status(200).json(response);
+  
     } catch (error) {
-        res.status(500).json({ message: error.message });
+      res.status(500).json({ message: error.message });
     }
-}
+  };
+  
 
 
 async function getLocation() {

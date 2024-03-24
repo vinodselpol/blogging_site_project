@@ -6,6 +6,7 @@ import ProtectedRoute from './components/ProtectedRoute.js'
 import CreatePost from './components/CreatePost.js';
 import Admin from './components/Admin.js';
 import Search from './components/Search.js';
+import Chatbot from './components/Chatbot.js';
 import './App.css';
 
 function App() {
@@ -22,7 +23,8 @@ function App() {
       
       
       <Route path='/admin' element={<ProtectedRoute requireAuth={true} requireAdmin={true}><Admin/></ProtectedRoute>} />
-      <Route path='/search' element={<ProtectedRoute><Search/></ProtectedRoute>} />
+      <Route path='/search' element={<ProtectedRoute requireAuth={true}><Search/></ProtectedRoute>} />
+      <Route path='/chatbot' element={<ProtectedRoute requireAuth={true}><Chatbot/></ProtectedRoute>} />
 
     </Routes>
     </BrowserRouter>

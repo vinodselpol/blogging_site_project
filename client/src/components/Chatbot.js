@@ -1,7 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Button, Box, Typography, TextField, Container, Avatar, Chip, AppBar, Toolbar} from '@mui/material';
+import { Button, Box, Typography, TextField, Container, Avatar, Chip, AppBar, Toolbar, IconButton} from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
 import ComputerIcon from '@mui/icons-material/Computer';
+import CloseIcon from '@mui/icons-material/Close';
+import { useNavigate } from 'react-router-dom';
 
 const Chatbot = () => {
   const [messages, setMessages] = useState([
@@ -18,6 +20,7 @@ const Chatbot = () => {
   ]);
   const [userInput, setUserInput] = useState('');
   const chatboxRef = useRef(null);
+  const navigate = useNavigate();
 
     const handleOptionClick = async (option) => {
     setMessages(prev => [...prev, { role: 'user', content: option }]);
@@ -49,13 +52,21 @@ const Chatbot = () => {
   }, [messages]);
 
   return (
-    <Box sx={{ width: '100%' }}> {/* No overflow hidden needed if disableGutters is used */}
+    <Box sx={{ width: '100%' }}>
     <Container maxWidth="sm" disableGutters sx={{ bgcolor: '#f5f5f5', height: '70vh', display: 'flex', flexDirection: 'column' }}>
-      <AppBar position="sticky" sx={{ bgcolor: '#2196f3', width: '100%' }}> {/* Should fill the width now without negative margins */}
+      <AppBar position="sticky" sx={{ bgcolor: '#2196f3', width: '100%' }}>
         <Toolbar>
           <Typography variant="h6" sx={{ flexGrow: 1, textAlign: 'center', color: 'white' }}>
             Chat with AI Agent
           </Typography>
+          <IconButton
+            edge="end"
+            color="inherit"
+            onClick={() => navigate('/')}
+            sx={{ position: 'absolute', right: 15 }}
+          >
+            <CloseIcon />
+          </IconButton>
         </Toolbar>
       </AppBar>
       <Box sx={{ flexGrow: 1, overflowY: 'auto', p: 2 }} ref={chatboxRef}>

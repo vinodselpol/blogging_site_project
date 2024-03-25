@@ -60,7 +60,7 @@ function CreateForm() {
 
             setTimeout(() => {
                 navigate('/'); // Adjust the path if your homepage has a different path
-            }, 5000);
+            }, 2000);
         // navigate('/');
         } catch (error) {
             // setError(true)

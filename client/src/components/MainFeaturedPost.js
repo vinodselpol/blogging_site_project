@@ -46,23 +46,57 @@ function MainFeaturedPost({ post }) {
             {post.linkText}
           </Link>
         </Box>
-        <Button variant="contained" color="primary" sx={{
-    color: 'purple', // Adjust the purple color as needed
-    bgcolor: 'white',
-    borderRadius: '10px', // rounded-full equivalent
-    px: '20px', // padding-left and padding-right
-    py: '7px', // padding-top and padding-bottom
-    boxShadow: 1, // basic shadow
-    fontWeight: 'bold',
-    my: 3, // margin-top and margin-bottom
-    '&:hover': {
-      boxShadow: '0px 4px 6px -1px rgba(0,0,0,0.1),0px 2px 4px -1px rgba(0,0,0,0.06)', // shadow-lg equivalent
-    },
-    '&:active': {
-      transform: 'scale(0.9)', // active:scale-90 equivalent
-    },
-    transition: 'all 0.15s ease-in-out', // transition duration-150 equivalent
-  }} onClick={() => navigate('/createpost')}>Create a Blog</Button>
+        <Box display={'flex'} justifyContent="space-between" sx={{ p: 2, m: 1, gap: '20px' }}>
+      <Button
+        variant="contained"
+        color="primary"
+        sx={{
+          color: 'white', // Text color
+          bgcolor: 'purple', // Button background color
+          borderRadius: '10px',
+          px: '20px',
+          py: '7px',
+          boxShadow: 1,
+          fontWeight: 'bold',
+          '&:hover': {
+            bgcolor: 'primary.dark', // Darken the button on hover for better contrast
+            boxShadow: '0px 4px 6px -1px rgba(0,0,0,0.1), 0px 2px 4px -1px rgba(0,0,0,0.06)',
+          },
+          '&:active': {
+            transform: 'scale(0.9)',
+          },
+          transition: 'all 0.15s ease-in-out',
+        }}
+        onClick={() => navigate('/createpost')}
+      >
+        Create a Blog
+      </Button>
+      <Button
+        variant="contained"
+        color="primary"
+        sx={{
+          color: 'white', // Adjusting the color scheme for consistency
+          bgcolor: 'purple', // Ensuring visual harmony
+          borderRadius: '10px',
+          px: '20px',
+          py: '7px',
+          boxShadow: 1,
+          fontWeight: 'bold',
+          '&:hover': {
+            bgcolor: 'primary.dark', // Ensures the button darkens on hover
+            boxShadow: '0px 4px 6px -1px rgba(0,0,0,0.1), 0px 2px 4px -1px rgba(0,0,0,0.06)',
+          },
+          '&:active': {
+            transform: 'scale(0.9)',
+          },
+          transition: 'all 0.15s ease-in-out',
+        }}
+        onClick={() => navigate('/chatbot')}
+      >
+        Talk to AI Agent
+      </Button>
+    </Box>
+       
        
       </BackgroundImageBox>
     </Paper>

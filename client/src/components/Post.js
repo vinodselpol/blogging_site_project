@@ -156,8 +156,80 @@ function Post({ post, postId, updatePosts, onDelete, isModerator }) {
           {showComments ? 'Hide Comments' : 'Show Comments'}
         </Button>
       </Box>
-  {showComments && (
+  {/* {showComments && (
   <Box mt={3} px={3} pb={2}>
+    {post.comments.length ? (
+      post.comments.map((comment, index) => (
+        <Paper
+          key={index}
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            p: 2,
+            mb: 2,
+            bgcolor: 'background.paper',
+            borderRadius: 2,
+            boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
+          }}
+        >
+          <Avatar sx={{ bgcolor: deepPurple[500], mr: 2 }}>
+            {comment.userName.charAt(0).toUpperCase()}
+          </Avatar>
+          <Box flexGrow={1}>
+            <Typography variant="body2" fontWeight="bold" color="primary.main">
+              {comment.userName.toUpperCase()}
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              {comment.text}
+            </Typography>
+          </Box>
+        </Paper>
+      ))
+    ) : (
+      <Typography color="text.secondary">No comments yet.</Typography>
+    )}
+    <TextField
+      fullWidth
+      variant="filled"
+      label="Add a comment"
+      value={newComment}
+      onChange={handleNewCommentChange}
+      margin="normal"
+      sx={{ my: 2, '.MuiFilledInput-root': { bgcolor: 'background.paper' } }}
+    />
+    <Box mt={2} display="flex" justifyContent="space-between" alignItems="center">
+      <Button
+        onClick={submitComment}
+        variant="contained"
+        color="primary"
+        sx={{ textTransform: 'none', borderRadius: 2, height: '40px' }}
+      >
+        Submit Comment
+      </Button>
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          p: '4px',
+          borderRadius: '8px',
+          border: '1px solid #e0e0e0',
+          backgroundColor: '#f0f0f0',
+          color: '#333'
+        }}
+      >
+        <Typography sx={{ fontWeight: 'bold', fontSize: '0.875rem', mr: 1 }}>
+          AI Comment:
+        </Typography>
+        <Switch
+          checked={autoCommentEnabled}
+          onChange={(e) => handleAutoCommentToggle(e.target.checked)}
+        />
+      </Box>
+    </Box>
+  </Box>
+)} */}
+{showComments && (
+  <Box mt={3} px={3} pb={2} sx={{ maxHeight: 300, overflow: 'auto' }}>
     {post.comments.length ? (
       post.comments.map((comment, index) => (
         <Paper

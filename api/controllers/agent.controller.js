@@ -54,13 +54,16 @@ export const askAIAgent = async (req, res) => {
   
       // Use the extracted 'query' parameter in the agent function
       const response = await agent(userQuery);
+
+      
+
+
       res.status(200).json(response);
   
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
   };
-  
 
 
 async function getLocation() {

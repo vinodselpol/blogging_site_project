@@ -71,31 +71,40 @@ const Chatbot = () => {
       </AppBar>
       <Box sx={{ flexGrow: 1, overflowY: 'auto', p: 2 }} ref={chatboxRef}>
       {messages.map((msg, index) => (
-        <Box key={index} sx={{
-          display: 'flex',
-          flexDirection: msg.role === 'ai' ? 'row-reverse' : 'row',
-          mb: 2,
-          alignItems: 'flex-start',
-        }}>
-          <Avatar sx={{
-            bgcolor: msg.role === 'ai' ? '#2196f3' : '#e0e0e0',
-            order: msg.role === 'ai' ? 2 : 1,
-          }}>
-            {msg.role === 'ai' ? <ComputerIcon /> : <PersonIcon />}
-          </Avatar>
-          <Box sx={{
-            order: msg.role === 'ai' ? 1 : 2,
-            bgcolor: msg.role === 'ai' ? '#e3f2fd' : '#f5f5f5',
-            p: 1,
-            borderRadius: '20px',
-            ml: 1,
-            mr: 1,
-            maxWidth: 'calc(100% - 48px)', // account for avatar size
-            alignSelf: 'flex-start',
-            wordBreak: 'break-word',
-            display: 'flex',
-            flexDirection: 'column',
-          }}>
+  <Box
+    key={index}
+    sx={{
+      display: 'flex',
+      flexDirection: msg.role === 'ai' ? 'row-reverse' : 'row',
+      mb: 2,
+      alignItems: 'flex-start',
+      justifyContent: msg.role === 'ai' ? 'flex-end' : 'flex-start', // Added justification
+    }}
+  >
+    <Avatar
+      sx={{
+        bgcolor: msg.role === 'ai' ? '#2196f3' : '#e0e0e0',
+        order: msg.role === 'ai' ? 2 : 1,
+        alignSelf: 'flex-start', // Align avatar to the start
+      }}
+    >
+      {msg.role === 'ai' ? <ComputerIcon /> : <PersonIcon />}
+    </Avatar>
+    <Box
+      sx={{
+        order: msg.role === 'ai' ? 1 : 2,
+        bgcolor: msg.role === 'ai' ? '#e3f2fd' : '#f5f5f5',
+        p: 1,
+        borderRadius: '20px',
+        ml: 1,
+        mr: 1,
+        maxWidth: 'calc(100% - 48px)', // account for avatar size
+        alignSelf: 'flex-start', // Align message content to the start
+        wordBreak: 'break-word',
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+    >
             <Typography variant="body1">
               {msg.content}
             </Typography>

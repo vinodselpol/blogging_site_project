@@ -12,7 +12,7 @@ async function getActivities() {
               q: "Things to do in Chicago",
               hl: "en",
               gl: "us",
-              htichips:"date:today",
+              htichips:"date:week",
               api_key: process.env.SERP_API_KEY,
             }, (data, error) => {
               if (error) {
@@ -40,12 +40,49 @@ async function getActivities() {
     
 }
 
+async function getSportActivities() {
+  try {
+      const response = await new Promise((resolve, reject) => {
+          getJson({
+            engine: "google_events",
+            q: "Sport events in Chicago",
+            hl: "en",
+            gl: "us",
+            htichips:"date:week",
+            api_key: process.env.SERP_API_KEY,
+          }, (data, error) => {
+            if (error) {
+              reject(error);
+            } else {
+              resolve(data);
+            }
+          });
+        });
+
+      const eventsResults = response["events_results"];
+      const activitiesData = eventsResults.map((event) => ({
+          title:event.title,
+          date: event.date,
+          address: event.address,
+          description: event.description,
+      }))
+
+      console.log("Sport events data is here",activitiesData);
+
+      return activitiesData;
+  } catch (error) {
+      console.log("Failed to fetch activities",error);
+  }
+  
+}
+
 
 
 export const askAIAgent = async (req, res) => {
     try {
       // Extract the 'query' parameter from the URL query string
       const userQuery = req.query.query;
+      // const userQuery = "Please suggest some sport events based on my location and the current weather."
   
       // Check if 'query' parameter is provided
       if (!userQuery) {
@@ -113,14 +150,26 @@ const tools = [
     {
       type: "function",
       function: {
-        name: "getActivities",
-        description: "Get the current activities to do in a given location",
+        name: "getSportActivities",
+        description: "Get the sport events to do in a given location",
         parameters: {
           type: "object", // Corrected to 'object' from 'array'
           properties: {},
         },
       },
     },
+    {
+      type: "function",
+      function: {
+        name: "getActivities",
+        description: "Get the current activities excluding sports to do in a given location",
+        parameters: {
+          type: "object", // Corrected to 'object' from 'array'
+          properties: {},
+        },
+      },
+    },
+   
 ];
 
 
@@ -144,7 +193,7 @@ const agent = async (userInput) => {
 
     for (let i = 0; i < 7; i++) {
     const response = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo", //gpt-4-0613
+      model: "gpt-3.5-turbo", //gpt-4-0613 //gpt-3.5-turbo
       messages: messages,
       tools: tools,
     });
@@ -184,7 +233,8 @@ return "The maximum number of iterations has been met without a suitable answer.
 const availableTools = {
     getCurrentWeather,
     getLocation,
-    getActivities
+    getActivities,
+    getSportActivities,
   };
   
 

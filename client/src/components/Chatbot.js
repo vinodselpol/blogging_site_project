@@ -14,7 +14,9 @@ const Chatbot = () => {
       options: [
         "Where am I located right now?", 
         "What's the weather like at my location", 
-        "Please suggest some activities to do based on my location and the current weather."
+        "Please recommend 3 restuarants to visit based on my location",
+        "Please suggest 3 musical events to do based on my location and the current weather.",
+        "Please suggest 3 sport events to do based on my location and the current weather."
       ] 
     }
   ]);

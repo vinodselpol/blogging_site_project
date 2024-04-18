@@ -79,6 +79,9 @@ function Header(props) {
               Sign up
             </Button>
           )}
+          <Button variant="text" size="small" onClick={() => navigate('/recommendation')}>
+              Recommended for you
+            </Button>
         </Box>
       </Toolbar>
       <Toolbar component="nav" variant="dense" sx={{ justifyContent: 'center', overflowX: 'auto' }}>

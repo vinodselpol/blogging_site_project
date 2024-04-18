@@ -8,6 +8,7 @@ import Admin from './components/Admin.js';
 import Search from './components/Search.js';
 import Chatbot from './components/Chatbot.js';
 import './App.css';
+import Recommendation from './components/Recommendation.js';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
       <Route path='/admin' element={<ProtectedRoute requireAuth={true} requireAdmin={true}><Admin/></ProtectedRoute>} />
       <Route path='/search' element={<ProtectedRoute requireAuth={true}><Search/></ProtectedRoute>} />
       <Route path='/chatbot' element={<ProtectedRoute requireAuth={true}><Chatbot/></ProtectedRoute>} />
+      <Route path='/recommendation' element={<ProtectedRoute requireAuth={true}><Recommendation/></ProtectedRoute>} />
 
     </Routes>
     </BrowserRouter>

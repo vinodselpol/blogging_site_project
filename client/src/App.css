@@ -29,6 +29,16 @@
 }
 
 
+@import "~leaflet/dist/leaflet.css";
+
+.user-location-marker .leaflet-marker-icon {
+  filter: hue-rotate(90deg) brightness(60%);
+}
+
+.random-marker .leaflet-marker-icon {
+  filter: hue-rotate(210deg) brightness(60%);
+}
+
 
 
 

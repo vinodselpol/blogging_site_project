@@ -2,6 +2,8 @@ import dotenv from 'dotenv';
 import { openai } from '../utils/openAi.js';
 import {getJson} from 'serpapi'
 dotenv.config();
+import axios from 'axios';
+
 
 
 async function getActivities() {
@@ -76,7 +78,45 @@ async function getSportActivities() {
   
 }
 
+async function getRestaurants() {
+  //for each activities data get its address and pass the adress as query to get the restaurants
+  
+ 
+  try {
+      const response = await new Promise((resolve, reject) => {
+          getJson({
+            engine: "google_maps",
+            q: "Restaurants in Chicago",
+            ll: "@41.8781,87.6298,15.1z",
+            type: "search",
+            api_key: process.env.SERP_API_KEY,
+          }, (data, error) => {
+            if (error) {
+              reject(error);
+            } else {
+              resolve(data);
+            }
+          });
+        });
 
+      const eventsResults = response["local_results"];
+      console.log("Restaunt data is here",eventsResults);
+      const restuarantsData = eventsResults.map((event) => ({
+          title:event.title,
+          address: event.address,
+          description: event.description,
+          operatingHours:event.operating_hours,
+          coordinates: event.gps_coordinates,
+      }))
+
+      console.log("Restaunt data is here",restuarantsData);
+
+      return restuarantsData;
+  } catch (error) {
+      console.log("Failed to fetch activities",error);
+  }
+  
+}
 
 export const askAIAgent = async (req, res) => {
     try {
@@ -92,8 +132,7 @@ export const askAIAgent = async (req, res) => {
       // Use the extracted 'query' parameter in the agent function
       const response = await agent(userQuery);
 
-      
-
+    
 
       res.status(200).json(response);
   
@@ -237,8 +276,81 @@ const availableTools = {
     getSportActivities,
   };
   
+// Function to get random entries from an array
+export const getRandomEntries = (array, count) => {
+  const shuffled = array.sort(() => 0.5 - Math.random()); // Shuffle the array
+  return shuffled.slice(0, count); // Get a subset of the shuffled array
+};
 
+  //Get the recommendation events address lat and long
 
+export const getLatLong = async (req, res) => {
+  try {
+      // Call getActivities function, getSportActivities function, and getRestaurants function
+      // Merge only the first 3 results of each
+      const activitiesData = await getActivities();
+      const sportActivitiesData = await getSportActivities();
+      const restaurantsData = await getRestaurants();
+
+     
+      // Get random entries for activities, sport activities, and restaurants
+      const randomActivities = getRandomEntries(activitiesData, 3);
+      const randomSportActivities = getRandomEntries(sportActivitiesData, 3);
+      const randomRestaurants = getRandomEntries(restaurantsData, 3);
+
+      // Geocode the addresses for activities
+      const geocodedActivities = await Promise.all(randomActivities.map(async (activity) => ({
+          ...activity,
+          coordinates: await geocodeAddress(Array.isArray(activity.address) ? activity.address.join(', ') : activity.address)
+      })));
+
+      // Geocode the addresses for sport activities
+      const geocodedSportActivities = await Promise.all(randomSportActivities.map(async (activity) => ({
+          ...activity,
+          coordinates: await geocodeAddress(Array.isArray(activity.address) ? activity.address.join(', ') : activity.address)
+      })));
+
+      // Prepare response object with categorized activities
+      const response = {
+          musical_events: geocodedActivities,
+          sport_events: geocodedSportActivities,
+          restaurants: randomRestaurants
+      };
+
+      console.log("Response:", response);
+
+      res.status(200).json(response);
+  } catch (error) {
+      console.error('Error:', error);
+      res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+ // Function to geocode an address using OpenStreetMap Nominatim API
+ const geocodeAddress = async (address) => {
+  console.log('address',address);
+  try {
+      const response = await axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
+          params: {
+              address: address,
+              key: process.env.GOOGLE_MAPS_API_KEY, // Replace with your Google Maps API key
+          }
+      });
+
+      const results = response.data.results;
+      if (results && results.length > 0) {
+          const firstResult = results[0];
+          const { lat, lng } = firstResult.geometry.location;
+          return { latitude: lat, longitude: lng };
+      } else {
+          throw new Error('Address not found');
+      }
+  } catch (error) {
+      console.error('Error:', error.response?.data || error.message);
+      throw new Error('Geocoding error');
+  }
+};
+  
 
 
 

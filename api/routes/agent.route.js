@@ -1,11 +1,12 @@
 import express from "express";
-import { askAIAgent } from "../controllers/agent.controller.js";
+import { askAIAgent, getLatLong } from "../controllers/agent.controller.js";
 
 
 const router = express.Router();
 
 
 router.get('/askagent', askAIAgent)
+router.get('/getlatlong', getLatLong)
 
 
 

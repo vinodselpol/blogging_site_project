@@ -3,7 +3,6 @@ import { openai } from '../utils/openAi.js';
 import {getJson} from 'serpapi'
 dotenv.config();
 import axios from 'axios';
-import redis from 'redis';
 import { createClient } from 'redis';
 
 
@@ -321,9 +320,9 @@ export const getLatLong = async (req, res) => {
   try {
       // Call getActivities function, getSportActivities function, and getRestaurants function
       // Merge only the first 3 results of each
-      const activitiesData = await getActivities();
-      const sportActivitiesData = await getSportActivities();
-      const restaurantsData = await getRestaurants();
+      const activitiesData = await getActivitiesCache();
+    const sportActivitiesData = await getSportActivitiesCache();
+    const restaurantsData = await getRestaurantsCache();
 
      
       // Get random entries for activities, sport activities, and restaurants
@@ -358,31 +357,6 @@ export const getLatLong = async (req, res) => {
       res.status(500).json({ error: 'Internal server error' });
   }
 };
-
- 
-//  const geocodeAddress = async (address) => {
-//   console.log('address',address);
-//   try {
-//       const response = await axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
-//           params: {
-//               address: address,
-//               key: process.env.GOOGLE_MAPS_API_KEY, // Replace with your Google Maps API key
-//           }
-//       });
-
-//       const results = response.data.results;
-//       if (results && results.length > 0) {
-//           const firstResult = results[0];
-//           const { lat, lng } = firstResult.geometry.location;
-//           return { latitude: lat, longitude: lng };
-//       } else {
-//           throw new Error('Address not found');
-//       }
-//   } catch (error) {
-//       console.error('Error:', error.response?.data || error.message);
-//       throw new Error('Geocoding error');
-//   }
-// };
 
 const geocodeAddress = async (address) => {
   console.log('address', address);
@@ -420,7 +394,52 @@ const geocodeAddress = async (address) => {
       throw new Error('Geocoding error');
   }
 };
-  
+
+
+const getActivitiesCache = async () => {
+  const cacheKey = 'activities';
+  const cachedData = await getFromCache(cacheKey);
+
+  if (cachedData) {
+    console.log('Activities data found in cache');
+    return cachedData;
+  }
+
+  const activitiesData = await getActivities();
+  await setInCache(cacheKey, activitiesData);
+
+  return activitiesData;
+};
+
+const getSportActivitiesCache = async () => {
+  const cacheKey = 'sportActivities';
+  const cachedData = await getFromCache(cacheKey);
+
+  if (cachedData) {
+    console.log('Sport activities data found in cache');
+    return cachedData;
+  }
+
+  const sportActivitiesData = await getSportActivities();
+  await setInCache(cacheKey, sportActivitiesData);
+
+  return sportActivitiesData;
+};
+
+const getRestaurantsCache = async () => {
+  const cacheKey = 'restaurants';
+  const cachedData = await getFromCache(cacheKey);
+
+  if (cachedData) {
+    console.log('Restaurants data found in cache');
+    return cachedData;
+  }
+
+  const restaurantsData = await getRestaurants();
+  await setInCache(cacheKey, restaurantsData);
+
+  return restaurantsData;
+};
 
 
 

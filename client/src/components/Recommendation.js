@@ -72,7 +72,7 @@ function Recommendation() {
     };
 
     return (
-        <MapContainer center={currentPosition || [51.505, -0.09]} zoom={13} style={{ height: '100vh', width: '100%' }}>
+        <MapContainer center={currentPosition || [41.881832, -87.623177]} zoom={13} style={{ height: '100vh', width: '100%' }}>
             <button onClick={handleNavigateToHomePage} style={{ position: 'absolute', top: '10px', right: '10px', zIndex: 1000 }}>
                 Go to Home
             </button>

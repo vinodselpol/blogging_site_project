@@ -3,7 +3,40 @@ import { openai } from '../utils/openAi.js';
 import {getJson} from 'serpapi'
 dotenv.config();
 import axios from 'axios';
+import redis from 'redis';
+import { createClient } from 'redis';
 
+
+const client = createClient();
+await client.connect();
+
+
+// Event listener for Redis errors
+client.on('error', (err) => {
+  console.error('Redis error:', err);
+});
+
+// Function to get data from Redis cache
+const getFromCache = async (key) => {
+  try {
+    const reply = await client.get(key);
+    console.log('Reply from cache:', reply);
+    return reply ? JSON.parse(reply) : null;
+  } catch (error) {
+    console.error('Error fetching data from cache:', error);
+    throw error;
+  }
+};
+
+// Function to set data in Redis cache
+const setInCache = async (key, value) => {
+  try {
+    await client.set(key, JSON.stringify(value));
+  } catch (error) {
+    console.error('Error setting data in cache:', error);
+    throw error;
+  }
+};
 
 
 async function getActivities() {
@@ -326,10 +359,42 @@ export const getLatLong = async (req, res) => {
   }
 };
 
- // Function to geocode an address using OpenStreetMap Nominatim API
- const geocodeAddress = async (address) => {
-  console.log('address',address);
+ 
+//  const geocodeAddress = async (address) => {
+//   console.log('address',address);
+//   try {
+//       const response = await axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
+//           params: {
+//               address: address,
+//               key: process.env.GOOGLE_MAPS_API_KEY, // Replace with your Google Maps API key
+//           }
+//       });
+
+//       const results = response.data.results;
+//       if (results && results.length > 0) {
+//           const firstResult = results[0];
+//           const { lat, lng } = firstResult.geometry.location;
+//           return { latitude: lat, longitude: lng };
+//       } else {
+//           throw new Error('Address not found');
+//       }
+//   } catch (error) {
+//       console.error('Error:', error.response?.data || error.message);
+//       throw new Error('Geocoding error');
+//   }
+// };
+
+const geocodeAddress = async (address) => {
+  console.log('address', address);
   try {
+      // Check if the result is already cached in Redis
+      const cachedResult = await getFromCache(address);
+      if (cachedResult) {
+          console.log('Result found in cache');
+          return cachedResult;
+      }
+
+      // If not cached, make a request to the geocoding API
       const response = await axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
           params: {
               address: address,
@@ -341,7 +406,12 @@ export const getLatLong = async (req, res) => {
       if (results && results.length > 0) {
           const firstResult = results[0];
           const { lat, lng } = firstResult.geometry.location;
-          return { latitude: lat, longitude: lng };
+          const coordinates = { latitude: lat, longitude: lng };
+
+          // Cache the result in Redis
+          await setInCache(address, coordinates);
+
+          return coordinates;
       } else {
           throw new Error('Address not found');
       }

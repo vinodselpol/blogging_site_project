@@ -240,6 +240,17 @@ const tools = [
         },
       },
     },
+    {
+      type: "function",
+      function: {
+        name: "getRestaurants",
+        description: "Get the current restauants to do in a given location",
+        parameters: {
+          type: "object", // Corrected to 'object' from 'array'
+          properties: {},
+        },
+      },
+    },
    
 ];
 
@@ -306,6 +317,7 @@ const availableTools = {
     getLocation,
     getActivities,
     getSportActivities,
+    getRestaurants
   };
   
 // Function to get random entries from an array
